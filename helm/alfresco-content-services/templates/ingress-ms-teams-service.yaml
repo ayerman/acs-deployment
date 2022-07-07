@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "ms-teams-service.labels" . | nindent 4 }}
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: "public"
 {{- if .Values.msTeamsService.extraAnnotations }}
 {{ toYaml .Values.msTeamsService.extraAnnotations | indent 4 }}
 {{- end }}

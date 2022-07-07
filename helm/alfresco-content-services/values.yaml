@@ -617,7 +617,7 @@ alfresco-digital-workspace:
   ingress:
     path: /workspace
     annotations:
-      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: public
       nginx.ingress.kubernetes.io/proxy-body-size: "5g"
     tls: []
     #  - secretName: chart-example-tls
@@ -691,7 +691,7 @@ postgresql:
   primary:
     nodeSelector: {}
   persistence:
-    existingClaim: "alfresco-volume-claim"
+    existingClaim: null
     subPath: "alfresco-content-services/database-data"
   resources:
     requests:
