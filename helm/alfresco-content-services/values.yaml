@@ -691,7 +691,7 @@ postgresql:
   primary:
     nodeSelector: {}
   persistence:
-    existingClaim: "alfresco-volume-claim"
+    existingClaim: null
     subPath: "alfresco-content-services/database-data"
   resources:
     requests:
