@@ -1,0 +1,35 @@
+{{- $serviceName :=  printf "%s-%s" (include "content-services.shortname" .) "imagemagick" -}}
+{{- $servicePort := .Values.imagemagick.service.externalPort -}}
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "content-services.shortname" . }}-imagemagick
+  labels:
+    {{- include "imagemagick.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    {{- include "ingress_annotations" .Values.imagemagick }}
+spec:
+  {{- if .Values.imagemagick.ingress.tls }}
+  tls:
+    {{- range .Values.imagemagick.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- if .Values.imagemagick.ingress.hostName }}
+  - host: {{ tpl .Values.imagemagick.ingress.hostName . }}
+    http:
+  {{- else }}
+  - http:
+  {{- end }}
+      paths:
+      - path: {{ .Values.imagemagick.ingress.path }}
+        {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+        pathType: Prefix
+        {{- end }}
+        backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" $servicePort "context" $) | nindent 10 }}
